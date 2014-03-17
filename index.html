@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+      
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+   
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  
+    <title>Tarheel Investigations</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/styles.css" rel="stylesheet">
+     
+	
+  
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+  <script>
+  $(function() {
+    $(document).tooltip();
+      
+    
+  });
+  </script>
+
+  
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+  
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Sports Weekly</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row ">
+	
+        <div id="title"><h1 class="ncaa-title">NCAA Investigation Characters</h1></div>
+        <p class="lead">Who was involved in the investigation and where are they now?</p>
+      </div>
+      <div id="message"></div>
+      <div class="row">
+       <!-- <div class="col-md-3">
+          <div id="navlist" class="box"></div>
+        </div>
+     -->
+        <div class="col-md-12">
+	  <div id="photoPage"></div>
+	  <div id="person"></div>
+          
+        </div>
+      </div>
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    
+
+
+ 
+    <script src="js/bootstrap.min.js"></script>
+    
+      <script>
+	
+	var htmlBottom = "";
+	var htmlNav = "<ul>";
+	var htmlTop = "<ul>";
+	
+	
+	
+      $(document).ready(function() {
+	//sequential functions coming up
+	loadXML(); 
+    
+		
+      });
+      
+    function loadXML(){
+      
+      //use Ajax to load in XML
+      
+      $.ajax ({
+	type: "GET",
+	url: "ncaa3.xml",
+	dataType: "xml",
+	success: parseXML //ajax passes whatever it loaded into the success function
+	
+      })
+      
+    } //end loadXML()
+  
+ 
+  
+  function parseXML(xml){
+    //we can pass data into a function by using parentheses 
+   
+    
+    $(xml).find("person").each(function(index){
+      
+      //builds left nav
+      tempName =     $(this).attr("name");
+      tempLastName = $(this).attr("last");
+      tempPhoto = $(this).find("photo").text();
+    
+   	
+    
+      
+      
+      htmlNav += "<li><img src='" + tempPhoto + "' title='" + title + "' width='50' height='50'><a href='#" + tempLastName + "'>" + tempName + "</a>  </li>";
+     
+      htmlTop += "<li class='inline'><a href='#" + tempLastName + "'>" + "<img src='" + tempPhoto + "' title='" + tempName + "' width='100' height='100' alt='player' data-toggle='modal' data-target='#myModal" + index + "' >" + "</a>" + "<div class='nameTitle'>" + tempName + "</div></li>"; 
+      
+      
+      htmlDone = "<a href='#" + tempLastName + "'>";
+      
+      //builds player profile at bottom of page for anchors
+      
+      htmlBottom += '<div class="modal fade" id="myModal' + index + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'
+      htmlBottom += '<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"></h4></div>';
+      htmlBottom += '<div class="modal-body">';
+      
+      htmlBottom += "<div class='floatRight'><img src='" + tempPhoto + "'width='100' height='100' alt='player'></div>";
+      htmlBottom += "<h3 id='" + tempLastName + "'>" + tempName + "</h3>";
+      htmlBottom += "<ul><li class='role'><p>" + $(this).find("location").text() + "</p></li>"
+      htmlBottom += "<li class='role'><p>" + $(this).find("occupation").text() + "</p></li></ul>";
+      htmlBottom += "<p>" + $(this).find("role").text() + "</p>";
+      
+      htmlBottom += '</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div>';
+    
+      htmlBottom += '</div></div>';
+   
+       $(".modal-body").append();
+     
+    
+     
+     
+      
+
+    
+    })
+     
+    
+    $("#person").append(htmlBottom);
+   
+    $("#navlist").append(htmlNav); 
+    $("#photoPage").append(htmlTop);
+     
+    
+  };
+      
+    </script>
+      
+<div class="tooltip top"></div>
+<!-- 
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+Modal -->
+
+
+
+
+  </body>
+</html>
